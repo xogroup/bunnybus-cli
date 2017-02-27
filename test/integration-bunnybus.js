@@ -12,13 +12,38 @@ const describe = lab.describe;
 const it = lab.it;
 const expect = Code.expect;
 
-describe('stream', () => {
+describe('bunnybus', () => {
 
-    it('should pipe echo command', (done) => {
-        // Shell.exec('cat package.json | bunnybus');
-        // Shell.exec('echo "{ \"hello\" : \"world\" }" | bunnybus');
-        //Shell.exec('cat test-file.json | bunnybus');
-        Shell.exec('cat test/mocks/object.json | bb-json-streamer');
+    before((done) => {
+
+        Shell.config.silent = true;
         done();
+    });
+
+    describe.only('config', () => {
+
+        it('should load config when provided ./test/mocks/configuration.json', (done) => {
+
+            const result = Shell.exec('bunnybus -c ./test/mocks/configuration.json');
+
+            expect(JSON.parse(result.stdout)).to.be.equal(require('./mocks/configuration.json'));
+            done();
+        });
+
+        it('should load config when provided test/mocks/configuration.json', (done) => {
+
+            const result = Shell.exec('bunnybus -c test/mocks/configuration.json');
+
+            expect(JSON.parse(result.stdout)).to.be.equal(require('./mocks/configuration.json'));
+            done();
+        });
+
+        it('should load config when provided $PWD/test/mocks/configuration.json', (done) => {
+
+            const result = Shell.exec('bunnybus -c $PWD/test/mocks/configuration.json');
+
+            expect(JSON.parse(result.stdout)).to.be.equal(require('./mocks/configuration.json'));
+            done();
+        });
     });
 });
