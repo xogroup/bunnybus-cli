@@ -15,7 +15,8 @@
   ],
   "main": "lib/index.js",
   "bin": {
-    "bunnybus": "lib/index.js"
+    "bunnybus": "lib/commands/bunnybus.js",
+    "bb-json-streamer": "lib/commands/bb-json-streamer.js"
   },
   "scripts": {
     "test": "lab test",
@@ -31,7 +32,7 @@
   },
   "dependencies": {
     "bunnybus": "2.x.x",
-    "stream-json": "^0.4.2"
+    "commander": "^2.9.0"
   },
   "devDependencies": {
     "code": "^4.0.0",

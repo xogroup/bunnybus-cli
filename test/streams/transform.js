@@ -5,8 +5,10 @@ const Code = require('code');
 const Assertions = require('./assertions');
 const Exceptions = require('../../lib/exceptions');
 const Streams = require('../../lib/streams');
+const StringReader = Streams.StringReader;
 const JsonToObjectTransform = Streams.JsonToObjectTransform;
 const StringToJsonBufferTransform = Streams.StringToJsonBufferTransform;
+const NewLineTransform = Streams.NewLineTransform;
 
 const lab = exports.lab = Lab.script();
 const before = lab.before;
@@ -145,6 +147,11 @@ describe('Transform Streams', () => {
                 Assertions.assertStream(done, null, new StringToJsonBufferTransform(), true, '} { "a" : "value1" } {', '{"a":"value1"}');
             });
 
+            it('should return json string when given { "a" : "value1" } }', (done) => {
+
+                Assertions.assertStream(done, null, new StringToJsonBufferTransform(), true, '{ "a" : "value1" } {', '{"a":"value1"}');
+            });
+
             it('should throw JsonStringFormatError when given { { "a" : "value1" }', (done) => {
 
                 Assertions.assertStream(done, null, new StringToJsonBufferTransform(), null, '{ { "a" : "value1" }', null, Exceptions.JsonStringFormatError);
@@ -152,6 +159,26 @@ describe('Transform Streams', () => {
         });
     });
 
+    describe('NewlineTransform', () => {
+
+        describe('positive test', () => {
+
+            it('should return a string with newline character', (done) => {
+
+                const string = 'test 1 2 3';
+                const stringReader = new StringReader(string);
+                const newLineTransform = new NewLineTransform();
+
+                const pipe = stringReader.pipe(newLineTransform);
+
+                pipe.on('data', (chunk) => {
+
+                    expect(chunk).to.be.equal(string + '\n');
+                    done();
+                });
+            });
+        });
+    });
     // describe.only('only', () => {
     //     it_object('should return json string when given', { a : 'value"' }, function(done) {
 
