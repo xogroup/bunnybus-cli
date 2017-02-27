@@ -6,7 +6,7 @@ const StringReader = Streams.StringReader;
 
 const expect = Code.expect;
 
-const assertStream = (callback, object, transform, assertJson, overrideInput, overrideExpectedOutput) => {
+const assertStream = (callback, object, transform, assertJson, overrideInput, overrideExpectedOutput, assertException) => {
 
     const inputString = overrideInput || JSON.stringify(object);
 
@@ -24,6 +24,13 @@ const assertStream = (callback, object, transform, assertJson, overrideInput, ov
 
         callback();
     });
+
+    if (assertException) {
+        transform.on('error', (err) => {
+            expect(err).to.be.an.error(assertException);
+            callback();
+        });
+    }
 };
 
 module.exports = assertStream;
