@@ -20,7 +20,7 @@ describe('Readable Streams', () => {
             const data = 'abcdefghijklmnopqrstuvwxyz';
             const stringReader = new StringReader(data);
 
-            stringReader.on('data', (chunk) => {
+            stringReader.once('data', (chunk) => {
 
                 expect(chunk).to.be.equal(data);
                 done();
@@ -36,10 +36,29 @@ describe('Readable Streams', () => {
 
             const objectReader = new ObjectReader(data);
 
-            objectReader.on('data', (chunk) => {
+            objectReader.once('data', (chunk) => {
 
                 expect(chunk).to.be.equal(data);
                 done();
+            });
+        });
+
+        it('should return an object buffer 3 times', (done) => {
+
+            const data = { event : 'systemA.message-created', body : 'some text we want to send' };
+            const iterations = 3;
+            let counter = 0;
+
+            const objectReader = new ObjectReader(data, { repeat : iterations });
+
+
+            objectReader.on('data', (chunk) => {
+
+                expect(chunk).to.be.equal(data);
+
+                if (++counter === iterations) {
+                    done();
+                }
             });
         });
     });

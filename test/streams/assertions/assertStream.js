@@ -13,7 +13,7 @@ const assertStream = (callback, object, transform, assertJson, overrideInput, ov
     const stringReader = new StringReader(inputString);
     const pipe = stringReader.pipe(transform);
 
-    pipe.on('data', (chunk) => {
+    pipe.once('data', (chunk) => {
 
         if (assertJson) {
             expect(chunk).to.be.equal(overrideExpectedOutput || inputString);
@@ -26,7 +26,7 @@ const assertStream = (callback, object, transform, assertJson, overrideInput, ov
     });
 
     if (assertException) {
-        transform.on('error', (err) => {
+        transform.once('error', (err) => {
             expect(err).to.be.an.error(assertException);
             callback();
         });

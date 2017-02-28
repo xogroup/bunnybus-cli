@@ -48,7 +48,10 @@ describe('Writable Streams', () => {
 
             beforeEach((done) => {
 
-                bunnyBus.unsubscribe(queueName, done);
+                Async.waterfall([
+                    bunnyBus._autoConnectChannel,
+                    bunnyBus.unsubscribe.bind(bunnyBus, queueName)
+                ], done);
             });
 
             after((done) => {
@@ -68,8 +71,10 @@ describe('Writable Streams', () => {
                 handlers[BareMessage.event] = (message, ack) => {
 
                     expect(message).to.be.equal(BareMessage);
-                    ack(done);
+                    ack();
                 };
+
+                bunnyBusPublisher.once('close', done);
 
                 bunnyBus.subscribe(queueName, handlers, () => {
 
