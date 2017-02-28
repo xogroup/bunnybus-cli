@@ -1,0 +1,16 @@
+{ 
+    "event" : "system.event-created",
+    "a" : "value1",
+    "b" : "value2",
+    "c" : {
+        "c.1" : {
+            "c.1.2" : {
+                "c.1.2.3" : "value4"
+            }
+        },
+        "c.2" : {
+            "c.2.3" : "value5"
+        }
+    },
+    "d" : "value6"
+}

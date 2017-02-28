@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "bunnybus": "2.x.x",
+    "async": "^2.1.5",
     "commander": "^2.9.0"
   },
   "devDependencies": {

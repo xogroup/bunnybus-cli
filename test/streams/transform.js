@@ -114,6 +114,11 @@ describe('Transform Streams', () => {
                 Assertions.assertStream(done, this, new StringToJsonBufferTransform(), true);
             });
 
+            it_object('should return json string when given', { a : 'value 1 value 2' }, function (done) {
+
+                Assertions.assertStream(done, this, new StringToJsonBufferTransform(), true);
+            });
+
             it_object('should return json string when given', { a : 'abæáÖÇÆÿģŒⓈ✟yz' }, function (done) {
 
                 Assertions.assertStream(done, this, new StringToJsonBufferTransform(), true);
@@ -132,6 +137,11 @@ describe('Transform Streams', () => {
             it_object('should return json string when given', { '\u4e0a\u6d77' : 'value1' }, function (done) {
 
                 Assertions.assertStream(done, this, new StringToJsonBufferTransform(), true);
+            });
+
+            it('should return json string when given { \\n\\t"a" : "value1", \\t\\n "b" : "value2" \\n }', (done) => {
+
+                Assertions.assertStream(done, null, new StringToJsonBufferTransform(), true, '{ \n\t"a" : "value1", \t\n "b" : "value2" \n }\n', '{"a":"value1","b":"value2"}');
             });
         });
 
@@ -179,10 +189,4 @@ describe('Transform Streams', () => {
             });
         });
     });
-    // describe.only('only', () => {
-    //     it_object('should return json string when given', { a : 'value"' }, function(done) {
-
-    //         Assertions.assertStream(done, this, new StringToJsonBufferTransform(), true);
-    //     });
-    // });
 });

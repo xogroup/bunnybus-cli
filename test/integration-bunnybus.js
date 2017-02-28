@@ -14,35 +14,58 @@ const expect = Code.expect;
 
 describe('bunnybus', () => {
 
+    const configurationPath = 'test/mocks/configuration.json';
+    const bareMessagePath = 'test/mocks/bareMessage.json';
+    const ConfigurationFile = require('./mocks/configuration.json');
+
     before((done) => {
 
         Shell.config.silent = true;
         done();
     });
 
-    describe.only('config', () => {
+    describe('config', () => {
 
-        it('should load config when provided ./test/mocks/configuration.json', (done) => {
+        it(`should stdout config when provided ./${configurationPath}`, (done) => {
 
-            const result = Shell.exec('bunnybus -c ./test/mocks/configuration.json');
+            const result = Shell.exec(`bunnybus -c ./${configurationPath}`);
 
-            expect(JSON.parse(result.stdout)).to.be.equal(require('./mocks/configuration.json'));
+            expect(JSON.parse(result.stdout)).to.be.equal(ConfigurationFile);
             done();
         });
 
-        it('should load config when provided test/mocks/configuration.json', (done) => {
+        it(`should stdout config when provided ${configurationPath}`, (done) => {
 
-            const result = Shell.exec('bunnybus -c test/mocks/configuration.json');
+            const result = Shell.exec(`bunnybus -c ${configurationPath}`);
 
-            expect(JSON.parse(result.stdout)).to.be.equal(require('./mocks/configuration.json'));
+            expect(JSON.parse(result.stdout)).to.be.equal(ConfigurationFile);
             done();
         });
 
-        it('should load config when provided $PWD/test/mocks/configuration.json', (done) => {
+        it(`should stdout config when provided $PWD/${configurationPath}`, (done) => {
 
-            const result = Shell.exec('bunnybus -c $PWD/test/mocks/configuration.json');
+            const result = Shell.exec(`bunnybus -c $PWD/${configurationPath}`);
 
-            expect(JSON.parse(result.stdout)).to.be.equal(require('./mocks/configuration.json'));
+            expect(JSON.parse(result.stdout)).to.be.equal(ConfigurationFile);
+            done();
+        });
+
+        it('should stderr when no path is provided with config flag', (done) => {
+
+            const result = Shell.exec('bunnybus -c');
+
+            expect(result.stderr.length).to.be.above(0);
+            done();
+        });
+    });
+
+    describe('publish', () => {
+
+        it('should publish when object is sent', (done) => {
+
+            const result = Shell.exec(`cat ${bareMessagePath} | bunnybus -P -c ${configurationPath}`);
+            console.dir(result);
+
             done();
         });
     });
