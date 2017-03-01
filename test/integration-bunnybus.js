@@ -145,4 +145,7 @@ describe('bunnybus', () => {
             });
         });
     });
+
+    describe('-S -c', () => {
+    });
 });
