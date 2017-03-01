@@ -32,7 +32,7 @@ describe('Writable Streams', () => {
 
     describe('BunnyBusPublisher', () => {
 
-        const queueName = 'bunnybus-cli-bunnybus-publisher';
+        const queueName = 'bunnybus-cli-bunnybus-publisher-stream';
 
         describe('positive test', () => {
 
