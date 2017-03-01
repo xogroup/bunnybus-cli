@@ -105,7 +105,7 @@ describe('bunnybus', () => {
             ], done);
         });
 
-        it('should publish when object is sent', { timeout : 5000 }, (done) => {
+        it('should publish a single object', { timeout : 5000 }, (done) => {
 
             const handlers = {};
             handlers[BareMessage.event] = (message, ack) => {
@@ -116,6 +116,32 @@ describe('bunnybus', () => {
             bunnyBus.subscribe(queueName, handlers, () => {
 
                 Exec(`cat ${bareMessagePath} | bunnybus -P -c ${configurationPath}`);
+            });
+        });
+
+        it('should publish a multiple object', { timeout : 5000 }, (done) => {
+
+            const handlers = {};
+            const iterations = 10;
+            let fileList = '';
+            let counter = 0;
+
+            handlers[BareMessage.event] = (message, ack) => {
+                expect(message).to.be.equal(BareMessage);
+                ack();
+
+                if (++counter) {
+                    done();
+                }
+            };
+
+            for (let i = 0; i < iterations; ++i) {
+                fileList += bareMessagePath + ' ';
+            }
+
+            bunnyBus.subscribe(queueName, handlers, () => {
+
+                Exec(`cat ${fileList} | bunnybus -P -c ${configurationPath}`);
             });
         });
     });

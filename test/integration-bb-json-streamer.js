@@ -13,6 +13,7 @@ const expect = Code.expect;
 describe('bb-json-streamer', () => {
 
     const sourceObject = JSON.stringify(require('./mocks/object.json'));
+    const objectPath = 'test/mocks/object.json';
 
     before((done) => {
 
@@ -21,7 +22,7 @@ describe('bb-json-streamer', () => {
 
     it('should pipe a single object.json to stdout', (done) => {
 
-        Exec('cat ./test/mocks/object.json | bb-json-streamer', (err, stdout) => {
+        Exec(`cat ${objectPath} | bb-json-streamer`, (err, stdout) => {
 
             expect(err).to.be.null();
             expect(stdout).to.be.equal(sourceObject + '\n');
@@ -29,9 +30,9 @@ describe('bb-json-streamer', () => {
         });
     });
 
-    it('should pipe multiple object.json to stdoout', (done) => {
+    it('should pipe multiple object.json to stdout', (done) => {
 
-        Exec('cat test/mocks/object.json test/mocks/object.json test/mocks/object.json | bb-json-streamer', (err, stdout) => {
+        Exec(`cat ${objectPath} ${objectPath} ${objectPath} | bb-json-streamer`, (err, stdout) => {
 
             expect(err).to.be.null();
             expect(stdout).to.be.equal(sourceObject + '\n' + sourceObject + '\n' + sourceObject + '\n');
