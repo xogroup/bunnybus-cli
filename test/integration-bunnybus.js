@@ -30,7 +30,7 @@ describe('bunnybus', () => {
         done();
     });
 
-    describe('config', () => {
+    describe('-c', () => {
 
         it(`should stdout config when provided ./${configurationPath}`, (done) => {
 
@@ -74,7 +74,7 @@ describe('bunnybus', () => {
         });
     });
 
-    describe('publish', () => {
+    describe('-P -c', () => {
 
         const queueName = 'bunnybus-cli-bunnybus-publisher';
 
