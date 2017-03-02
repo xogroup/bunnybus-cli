@@ -2,6 +2,7 @@
 
 const Lab = require('lab');
 const Code = require('code');
+const Assertions = require('./assertions');
 const Async = require('async');
 const BunnyBus = require('bunnybus');
 const Exec = require('child_process').exec;
@@ -32,45 +33,24 @@ describe('bunnybus', () => {
 
     describe('-c', () => {
 
-        it(`should stdout config when provided ./${configurationPath}`, (done) => {
+        it('should stdout config when prepended "./"', (done) => {
 
-            Exec(`bunnybus -c ./${configurationPath}`, (err, stdout) => {
-
-                expect(err).to.be.null();
-                expect(JSON.parse(stdout)).to.be.equal(ConfigurationFile);
-                done();
-            });
+            Assertions.assertCliConfig('./', true, done);
         });
 
-        it(`should stdout config when provided ${configurationPath}`, (done) => {
+        it('should stdout config when nothing is prepended', (done) => {
 
-            Exec(`bunnybus -c ${configurationPath}`, (err, stdout) => {
-
-                expect(err).to.be.null();
-                expect(JSON.parse(stdout)).to.be.equal(ConfigurationFile);
-                done();
-            });
+            Assertions.assertCliConfig('', true, done);
         });
 
-        it(`should stdout config when provided $PWD/${configurationPath}`, (done) => {
+        it('should stdout config when prepended "$PWD/"', (done) => {
 
-
-            Exec(`bunnybus -c $PWD/${configurationPath}`, (err, stdout) => {
-
-                expect(err).to.be.null();
-                expect(JSON.parse(stdout)).to.be.equal(ConfigurationFile);
-                done();
-            });
+            Assertions.assertCliConfig('$PWD/', true, done);
         });
 
         it('should stderr when no path is provided with config flag', (done) => {
 
-            Exec('bunnybus -c', (err, stdout, stderr) => {
-
-                expect(err).to.exist();
-                expect(stderr.length).to.be.above(0);
-                done();
-            });
+            Assertions.assertCliConfig(null, false, done);
         });
     });
 
@@ -105,47 +85,66 @@ describe('bunnybus', () => {
             ], done);
         });
 
-        it('should publish a single object', { timeout : 5000 }, (done) => {
+        it('should publish a 1 object', (done) => {
 
-            const handlers = {};
-            handlers[BareMessage.event] = (message, ack) => {
-                expect(message).to.be.equal(BareMessage);
-                ack(done);
-            };
-
-            bunnyBus.subscribe(queueName, handlers, () => {
-
-                Exec(`cat ${bareMessagePath} | bunnybus -P -c ${configurationPath}`);
-            });
+            Assertions.assertCliPublisher(bunnyBus, queueName, 1, done);
         });
 
-        it('should publish a multiple object', { timeout : 5000 }, (done) => {
+        it('should publish a 35 objects', (done) => {
 
-            const handlers = {};
-            const iterations = 10;
-            let fileList = '';
-            let counter = 0;
+            Assertions.assertCliPublisher(bunnyBus, queueName, 51, done);
+        });
 
-            handlers[BareMessage.event] = (message, ack) => {
-                expect(message).to.be.equal(BareMessage);
-                ack();
+        it('should publish a 51 objects', (done) => {
 
-                if (++counter) {
-                    done();
-                }
-            };
+            Assertions.assertCliPublisher(bunnyBus, queueName, 51, done);
+        });
 
-            for (let i = 0; i < iterations; ++i) {
-                fileList += bareMessagePath + ' ';
-            }
+        it('should publish a 60 objects', (done) => {
 
-            bunnyBus.subscribe(queueName, handlers, () => {
+            Assertions.assertCliPublisher(bunnyBus, queueName, 60, done);
+        });
 
-                Exec(`cat ${fileList} | bunnybus -P -c ${configurationPath}`);
-            });
+        it('should publish a 75 objects', (done) => {
+
+            Assertions.assertCliPublisher(bunnyBus, queueName, 75, done);
+        });
+
+        it('should publish a 100 objects', (done) => {
+
+            Assertions.assertCliPublisher(bunnyBus, queueName, 100, done);
         });
     });
 
     describe('-S -c', () => {
+
+        const queueName = 'bunnybus-cli-bunnybus-publisher';
+
+        before((done) => {
+
+            Async.waterfall([
+                bunnyBus._autoConnectChannel,
+                (cb) => bunnyBus.createExchange(bunnyBus.config.globalExchange, 'topic', cb),
+                (result, cb) => bunnyBus.createQueue(queueName, cb),
+                (result, cb) => bunnyBus.channel.bindQueue(queueName, bunnyBus.config.globalExchange, BareMessage.event, null, cb)
+            ], done);
+        });
+
+        beforeEach((done) => {
+
+            Async.waterfall([
+                bunnyBus._autoConnectChannel,
+                bunnyBus.unsubscribe.bind(bunnyBus, queueName)
+            ], done);
+        });
+
+        after((done) => {
+
+            Async.waterfall([
+                bunnyBus._autoConnectChannel,
+                bunnyBus.deleteExchange.bind(bunnyBus, queueName),
+                bunnyBus.deleteQueue.bind(bunnyBus, queueName)
+            ], done);
+        });
     });
 });

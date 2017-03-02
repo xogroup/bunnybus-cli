@@ -1,7 +1,7 @@
 'use strict';
 
 const Code = require('code');
-const Streams = require('../../../lib/streams');
+const Streams = require('../../lib/streams');
 const StringReader = Streams.StringReader;
 
 const expect = Code.expect;

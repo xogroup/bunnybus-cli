@@ -2,7 +2,7 @@
 
 const Lab = require('lab');
 const Code = require('code');
-const Assertions = require('./assertions');
+const Assertions = require('../assertions');
 const Exceptions = require('../../lib/exceptions');
 const Streams = require('../../lib/streams');
 const StringReader = Streams.StringReader;
