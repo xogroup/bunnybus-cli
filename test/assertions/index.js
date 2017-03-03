@@ -5,7 +5,7 @@ module.exports = {
     assertObjectCounter : require('./assertObjectCounter'),
     assertCliConfig : require('./assertCliConfig'),
     assertCliPublisher : require('./assertCliPublish'),
-    assertCliSubscriber : require('./assertCliSubscribe'),
-    assertStreamSubscribe : require('./assertStreamSubscribe'),
+    assertCliSubscriber : require('./assertCliSubscriber'),
+    assertStreamSubscriber : require('./assertStreamSubscriber'),
     assertStreamObjectReader : require('./assertStreamObjectReader')
 };

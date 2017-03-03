@@ -140,12 +140,12 @@ describe('bunnybus', () => {
 
         it('should subscribe 100 object', (done) => {
 
-            Assertions.assertCliSubscriber(bunnyBus, queueName, 100, done, 800);
+            Assertions.assertCliSubscriber(bunnyBus, queueName, 100, done, 400);
         });
 
         it('should subscribe 1000 object', (done) => {
 
-            Assertions.assertCliSubscriber(bunnyBus, queueName, 1000, done, 1400);
+            Assertions.assertCliSubscriber(bunnyBus, queueName, 1000, done, 800);
         });
     });
 });
