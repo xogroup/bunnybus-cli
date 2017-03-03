@@ -54,7 +54,7 @@ describe('bunnybus', () => {
         });
     });
 
-    describe('-P -c', () => {
+    describe('-P -c -d', () => {
 
         const queueName = 'bunnybus-cli-bunnybus-publisher';
 
@@ -116,54 +116,41 @@ describe('bunnybus', () => {
         });
     });
 
-    // describe('-S -c', () => {
+    describe('-S -c', () => {
 
-    //     const queueName = 'bunnybus-cli-bunnybus-subscriber';
+        const queueName = ConfigurationFile.queue.name;
 
-    //     before((done) => {
+        beforeEach((done) => {
 
-    //         Async.waterfall([
-    //             bunnyBus._autoConnectChannel,
-    //             (cb) => bunnyBus.createExchange(bunnyBus.config.globalExchange, 'topic', cb),
-    //             (result, cb) => bunnyBus.createQueue(queueName, cb)
-    //         ], done);
-    //     });
+            Async.waterfall([
+                bunnyBus._autoConnectChannel,
+                (cb) => bunnyBus.createExchange(bunnyBus.config.globalExchange, 'topic', cb),
+                (result, cb) => bunnyBus.createQueue(queueName, cb)
+            ], done);
+        });
 
-    //     beforeEach((done) => {
+        afterEach((done) => {
 
-    //         Async.waterfall([
-    //             bunnyBus._autoConnectChannel,
-    //             bunnyBus.unsubscribe.bind(bunnyBus, queueName)
-    //         ], done);
-    //     });
+            Async.waterfall([
+                bunnyBus._autoConnectChannel,
+                bunnyBus.deleteExchange.bind(bunnyBus, queueName),
+                bunnyBus.deleteQueue.bind(bunnyBus, queueName)
+            ], done);
+        });
 
-    //     after((done) => {
+        it('should subscribe 1 object', (done) => {
 
-    //         Async.waterfall([
-    //             bunnyBus._autoConnectChannel,
-    //             bunnyBus.deleteExchange.bind(bunnyBus, queueName),
-    //             bunnyBus.deleteQueue.bind(bunnyBus, queueName)
-    //         ], done);
-    //     });
+            Assertions.assertCliSubscriber(bunnyBus, queueName, 1, done, 50);
+        });
 
-    //     it.only('should subscribe 1 object', (done) => {
+        it('should subscribe 100 object', (done) => {
 
-    //         const BareMessage = require('./mocks/bareMessage.json');
-    //         const configurationPath = 'test/mocks/configuration.json';
-    //         const iterations = 1;
+            Assertions.assertCliSubscriber(bunnyBus, queueName, 100, done, 400);
+        });
 
-    //         Async.timesLimit(
-    //             iterations,
-    //             50,
-    //             (n, cb) => bunnyBus.send(BareMessage, queueName, cb),
-    //             () => {
+        it('should subscribe 1000 object', (done) => {
 
-    //                 Exec(`bunnyBus -S -c ${configurationPath} | bb-json-streamer | wc -l`, (err, stdout) => {
-    //                     expect(stdout).to.be.equal(iterations);
-    //                     done();
-    //                 });
-    //             }
-    //         );
-    //     });
-    // });
+            Assertions.assertCliSubscriber(bunnyBus, queueName, 1000, done, 900);
+        });
+    });
 });

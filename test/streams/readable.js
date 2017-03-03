@@ -84,17 +84,17 @@ describe('Readable Streams', () => {
 
             it('should subscribe a 1 message from a queue', (done) => {
 
-                Assertions.assertStreamSubscribe(bunnyBus, 1, queueName, done, 30);
+                Assertions.assertStreamSubscribe(bunnyBus, 1, queueName, done, 50);
             });
 
             it('should subscribe a 100 message from a queue', (done) => {
 
-                Assertions.assertStreamSubscribe(bunnyBus, 100, queueName, done, 200);
+                Assertions.assertStreamSubscribe(bunnyBus, 100, queueName, done, 400);
             });
 
             it('should subscribe a 1000 message from a queue', (done) => {
 
-                Assertions.assertStreamSubscribe(bunnyBus, 1000, queueName, done, 800);
+                Assertions.assertStreamSubscribe(bunnyBus, 1000, queueName, done, 1000);
             });
         });
     });

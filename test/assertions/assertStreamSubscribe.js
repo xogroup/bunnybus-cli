@@ -24,9 +24,9 @@ const assertStreamSubscribe = (bunnyBus, iterations, queueName, callback, durati
         (n, cb) => bunnyBus.send(BareMessage, queueName, cb),
         () => {
 
-            const pipe = bunnyBusSubscriber.pipe(objectCounterRecorder);
+            bunnyBusSubscriber.pipe(objectCounterRecorder);
 
-            pipe.once('finish', () => {
+            bunnyBusSubscriber.once('close', () => {
 
                 expect(objectCounterRecorder.count).to.equal(iterations);
                 callback();
