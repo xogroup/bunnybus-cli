@@ -16,6 +16,7 @@
     },
     "queue": {
         "name": "bunnybus-cli-test",
+        "routeKey": "system.event-created",
         "exclusive": false,
         "durable": true,
         "autoDelete": false,

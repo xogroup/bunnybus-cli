@@ -22,7 +22,6 @@ const assertCliPublish = (bunnyBus, queueName, iterations, callback) => {
         if (++counter === iterations) {
             callback();
         }
-        // console.log(counter);
     };
 
     for (let i = 0; i < iterations; ++i) {
@@ -32,7 +31,6 @@ const assertCliPublish = (bunnyBus, queueName, iterations, callback) => {
     bunnyBus.subscribe(queueName, handlers, () => {
 
         Exec(`cat ${fileList} | bunnybus -P -c ${configurationPath}`, (err, stdout) => {
-            // console.log(stdout);
         });
     });
 };

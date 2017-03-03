@@ -2,37 +2,48 @@
 
 const Lab = require('lab');
 const Code = require('code');
+const Assertions = require('../assertions');
 const Async = require('async');
 const BunnyBus = require('bunnybus');
-const Exceptions = require('../../lib/exceptions');
 const Streams = require('../../lib/streams');
 const ObjectReader = Streams.ObjectReader;
+const ObjectCountRecorder = Streams.ObjectCountRecorder;
 const BunnyBusPublisher = Streams.BunnyBusPublisher;
 
 const lab = exports.lab = Lab.script();
 const before = lab.before;
 const beforeEach = lab.beforeEach;
 const after = lab.after;
-const afterEach = lab.afterEach;
 const describe = lab.describe;
 const it = lab.it;
 const expect = Code.expect;
 
-let bunnyBus = undefined;
-
 describe('Writable Streams', () => {
 
-    const BareMessage = require('../mocks/bareMessage.json');
+    describe('ObjectCountWriter', () => {
 
-    before((done) => {
+        it('should return a count of 1', (done) => {
 
-        bunnyBus = new BunnyBus();
-        done();
+            Assertions.assertObjectCounter(1, done);
+        });
+
+        it('should return a count of 99', (done) => {
+
+            Assertions.assertObjectCounter(99, done);
+        });
     });
 
     describe('BunnyBusPublisher', () => {
 
+        const BareMessage = require('../mocks/bareMessage.json');
         const queueName = 'bunnybus-cli-bunnybus-publisher-stream';
+        let bunnyBus = undefined;
+
+        before((done) => {
+
+            bunnyBus = new BunnyBus();
+            done();
+        });
 
         describe('positive test', () => {
 

@@ -116,35 +116,54 @@ describe('bunnybus', () => {
         });
     });
 
-    describe('-S -c', () => {
+    // describe('-S -c', () => {
 
-        const queueName = 'bunnybus-cli-bunnybus-publisher';
+    //     const queueName = 'bunnybus-cli-bunnybus-subscriber';
 
-        before((done) => {
+    //     before((done) => {
 
-            Async.waterfall([
-                bunnyBus._autoConnectChannel,
-                (cb) => bunnyBus.createExchange(bunnyBus.config.globalExchange, 'topic', cb),
-                (result, cb) => bunnyBus.createQueue(queueName, cb),
-                (result, cb) => bunnyBus.channel.bindQueue(queueName, bunnyBus.config.globalExchange, BareMessage.event, null, cb)
-            ], done);
-        });
+    //         Async.waterfall([
+    //             bunnyBus._autoConnectChannel,
+    //             (cb) => bunnyBus.createExchange(bunnyBus.config.globalExchange, 'topic', cb),
+    //             (result, cb) => bunnyBus.createQueue(queueName, cb)
+    //         ], done);
+    //     });
 
-        beforeEach((done) => {
+    //     beforeEach((done) => {
 
-            Async.waterfall([
-                bunnyBus._autoConnectChannel,
-                bunnyBus.unsubscribe.bind(bunnyBus, queueName)
-            ], done);
-        });
+    //         Async.waterfall([
+    //             bunnyBus._autoConnectChannel,
+    //             bunnyBus.unsubscribe.bind(bunnyBus, queueName)
+    //         ], done);
+    //     });
 
-        after((done) => {
+    //     after((done) => {
 
-            Async.waterfall([
-                bunnyBus._autoConnectChannel,
-                bunnyBus.deleteExchange.bind(bunnyBus, queueName),
-                bunnyBus.deleteQueue.bind(bunnyBus, queueName)
-            ], done);
-        });
-    });
+    //         Async.waterfall([
+    //             bunnyBus._autoConnectChannel,
+    //             bunnyBus.deleteExchange.bind(bunnyBus, queueName),
+    //             bunnyBus.deleteQueue.bind(bunnyBus, queueName)
+    //         ], done);
+    //     });
+
+    //     it.only('should subscribe 1 object', (done) => {
+
+    //         const BareMessage = require('./mocks/bareMessage.json');
+    //         const configurationPath = 'test/mocks/configuration.json';
+    //         const iterations = 1;
+
+    //         Async.timesLimit(
+    //             iterations,
+    //             50,
+    //             (n, cb) => bunnyBus.send(BareMessage, queueName, cb),
+    //             () => {
+
+    //                 Exec(`bunnyBus -S -c ${configurationPath} | bb-json-streamer | wc -l`, (err, stdout) => {
+    //                     expect(stdout).to.be.equal(iterations);
+    //                     done();
+    //                 });
+    //             }
+    //         );
+    //     });
+    // });
 });

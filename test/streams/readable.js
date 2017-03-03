@@ -2,11 +2,16 @@
 
 const Lab = require('lab');
 const Code = require('code');
+const Assertions = require('../assertions');
+const Async = require('async');
+const BunnyBus = require('bunnybus');
 const Streams = require('../../lib/streams');
 const StringReader = Streams.StringReader;
-const ObjectReader = Streams.ObjectReader;
 
 const lab = exports.lab = Lab.script();
+const before = lab.before;
+const beforeEach = lab.beforeEach;
+const afterEach = lab.afterEach;
 const describe = lab.describe;
 const it = lab.it;
 const expect = Code.expect;
@@ -30,35 +35,66 @@ describe('Readable Streams', () => {
 
     describe('ObjectReader', () => {
 
-        it('should return an object buffer', (done) => {
+        it('should return an 1 object buffer', (done) => {
 
-            const data = { event : 'systemA.message-created', body : 'some text we want to send' };
-
-            const objectReader = new ObjectReader(data);
-
-            objectReader.once('data', (chunk) => {
-
-                expect(chunk).to.be.equal(data);
-                done();
-            });
+            Assertions.assertStreamObjectReader(1, done);
         });
 
-        it('should return an object buffer 3 times', (done) => {
+        it('should return an 100 object buffer', (done) => {
 
-            const data = { event : 'systemA.message-created', body : 'some text we want to send' };
-            const iterations = 3;
-            let counter = 0;
+            Assertions.assertStreamObjectReader(100, done);
+        });
 
-            const objectReader = new ObjectReader(data, { repeat : iterations });
+        it('should return an 1000 object buffer', (done) => {
 
+            Assertions.assertStreamObjectReader(1000, done);
+        });
+    });
 
-            objectReader.on('data', (chunk) => {
+    describe('BunnyBusSubscriber', () => {
 
-                expect(chunk).to.be.equal(data);
+        const queueName = 'bunnybus-cli-bunnybus-subscriber-stream';
+        let bunnyBus = undefined;
 
-                if (++counter === iterations) {
-                    done();
-                }
+        before((done) => {
+
+            bunnyBus = new BunnyBus();
+            done();
+        });
+
+        describe('positive test', () => {
+
+            beforeEach((done) => {
+
+                Async.waterfall([
+                    bunnyBus._autoConnectChannel,
+                    (cb) => bunnyBus.createExchange(bunnyBus.config.globalExchange, 'topic', cb),
+                    (result, cb) => bunnyBus.createQueue(queueName, cb)
+                ], done);
+            });
+
+            afterEach((done) => {
+
+                Async.waterfall([
+                    bunnyBus._autoConnectChannel,
+                    bunnyBus.deleteExchange.bind(bunnyBus, queueName),
+                    bunnyBus.deleteQueue.bind(bunnyBus, queueName)
+                ], done);
+            });
+
+            it('should subscribe a 1 message from a queue', (done) => {
+
+                Assertions.assertStreamSubscribe(bunnyBus, 1, queueName, done, 30);
+            });
+
+            it('should subscribe a 100 message from a queue', (done) => {
+
+                Assertions.assertStreamSubscribe(bunnyBus, 100, queueName, done, 200);
+            });
+
+            it('should subscribe a 1000 message from a queue', (done) => {
+
+                Assertions.assertStreamSubscribe(bunnyBus, 1000, queueName, done, 800);
             });
         });
     });
