@@ -7,3 +7,4 @@ while ! nc -z 127.0.0.1 5672; do
 done
 
 echo CONNECTION DETECTED, WAITING FOR 3 SEC TO FINISH RMQ BOOTUP
+sleep 3
