@@ -8,7 +8,6 @@ const expect = Code.expect;
 
 const BareMessage = require('../mocks/bareMessage.json');
 const configurationPath = 'test/mocks/configuration.json';
-const bareMessagePath = 'test/mocks/bareMessage.json';
 
 const assertCliSubscribe = (bunnyBus, queueName, iterations, callback, duration = 1700) => {
 

@@ -7,7 +7,6 @@ const Async = require('async');
 const BunnyBus = require('bunnybus');
 const Streams = require('../../lib/streams');
 const ObjectReader = Streams.ObjectReader;
-const ObjectCountRecorder = Streams.ObjectCountRecorder;
 const BunnyBusPublisher = Streams.BunnyBusPublisher;
 
 const lab = exports.lab = Lab.script();

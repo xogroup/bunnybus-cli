@@ -27,6 +27,7 @@ const assertStream = (callback, object, transform, assertJson, overrideInput, ov
 
     if (assertException) {
         transform.once('error', (err) => {
+
             expect(err).to.be.an.error(assertException);
             callback();
         });

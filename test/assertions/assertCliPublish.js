@@ -16,6 +16,7 @@ const assertCliPublish = (bunnyBus, queueName, iterations, callback) => {
     let counter = 0;
 
     handlers[BareMessage.event] = (message, ack) => {
+
         expect(message).to.be.equal(BareMessage);
         ack();
 
@@ -30,8 +31,7 @@ const assertCliPublish = (bunnyBus, queueName, iterations, callback) => {
 
     bunnyBus.subscribe(queueName, handlers, () => {
 
-        Exec(`cat ${fileList} | bunnybus -P -c ${configurationPath}`, (err, stdout) => {
-        });
+        Exec(`cat ${fileList} | bunnybus -P -c ${configurationPath}`);
     });
 };
 

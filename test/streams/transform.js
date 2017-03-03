@@ -11,9 +11,6 @@ const StringToJsonBufferTransform = Streams.StringToJsonBufferTransform;
 const NewLineTransform = Streams.NewLineTransform;
 
 const lab = exports.lab = Lab.script();
-const before = lab.before;
-const after = lab.after;
-const afterEach = lab.afterEach;
 const describe = lab.describe;
 const it = lab.it;
 const expect = Code.expect;
@@ -25,7 +22,7 @@ const it_object = (name, object, options, callback) => {
     }
 
     it(`${name} ${JSON.stringify(object)}`, options, callback.bind(object));
-}
+};
 
 describe('Transform Streams', () => {
 

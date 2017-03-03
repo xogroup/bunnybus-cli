@@ -2,7 +2,7 @@
 
 const LabConfig = {
     assert : 'code',
-    // lint : true,
+    lint : true,
     verbose : true
 };
 

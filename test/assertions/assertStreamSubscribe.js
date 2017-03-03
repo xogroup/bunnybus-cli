@@ -19,8 +19,8 @@ const assertStreamSubscribe = (bunnyBus, iterations, queueName, callback, durati
     const objectCounterRecorder = new ObjectCountRecorder();
 
     Async.timesLimit(
-        iterations, 
-        50,  
+        iterations,
+        50,
         (n, cb) => bunnyBus.send(BareMessage, queueName, cb),
         () => {
 

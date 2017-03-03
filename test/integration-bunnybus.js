@@ -1,11 +1,9 @@
 'use strict';
 
 const Lab = require('lab');
-const Code = require('code');
 const Assertions = require('./assertions');
 const Async = require('async');
 const BunnyBus = require('bunnybus');
-const Exec = require('child_process').exec;
 
 const lab = exports.lab = Lab.script();
 const before = lab.before;
@@ -14,14 +12,11 @@ const after = lab.after;
 const afterEach = lab.afterEach;
 const describe = lab.describe;
 const it = lab.it;
-const expect = Code.expect;
 
 let bunnyBus = undefined;
 
 describe('bunnybus', () => {
 
-    const configurationPath = 'test/mocks/configuration.json';
-    const bareMessagePath = 'test/mocks/bareMessage.json';
     const ConfigurationFile = require('./mocks/configuration.json');
     const BareMessage = require('./mocks/bareMessage.json');
 
