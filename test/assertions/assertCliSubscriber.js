@@ -20,12 +20,10 @@ const assertCliSubscriber = (bunnyBus, queueName, iterations, callback, duration
             // wc - counts the lines of output
             // xargs - strips out the number only
             // tr - removes unwanted character
-            // Exec(`bunnyBus -S -c ${configurationPath} -d ${duration} | wc -l | xargs | tr -d "\n"`, (err, stdout) => {
-                Exec(`bunnyBus -S -c ${configurationPath} -d ${duration}`, (err, stdout) => {
-                console.log(stdout);
-                console.log(stderr);
-                // expect(err).to.be.null();
-                // expect(stdout).to.be.equal(iterations.toString());
+            Exec(`bunnyBus -S -c ${configurationPath} -d ${duration} | wc -l | xargs | tr -d "\n"`, (err, stdout) => {
+
+                expect(err).to.be.null();
+                expect(stdout).to.be.equal(iterations.toString());
                 callback();
             });
         }
