@@ -1,9 +1,5 @@
 # bunnybus-cli
-Command line tool for [BunnyBus]().
-
-Currently supports the following queueing frameworks.
-
-- [RabbitMQ](https://www.rabbitmq.com/)
+Command line tool for [BunnyBus](https://github.com/xogroup/bunnybus).
 
 [![npm version](https://badge.fury.io/js/bunnybus-cli.svg)](https://badge.fury.io/js/bunnybus-cli)
 [![Build Status](https://travis-ci.org/xogroup/bunnybus-cli.svg?branch=master)](https://travis-ci.org/xogroup/bunnybus-cli)
@@ -13,7 +9,7 @@ Currently supports the following queueing frameworks.
 Lead Maintainer: [Lam Chan](https://github.com/lamchakchan)
 
 ## Introduction
-BunnyBus abstracts away low level queue driver details such as creating a connection, creating a channel, creating bindings, creating subscribing queues and etc.  BunnyBus provides safe defaults for many setups which can also be configured.  The core of BunnyBus implements native node callbacks providing maximum performance.  BunnyBus provides two flavors of API for callbacks and Promise alike.
+This is a command line tool for supporting the BunnyBus ecosystem.  Support comes in the form of providing a piping utility to bus data via Linux/Unix pipes.  The implementation of this tool embodies the ideology around building small specialized components to compose better whole.
 
 ## Installation
 ```
@@ -21,7 +17,15 @@ npm i -g bunnybus-cli
 ```
 
 ##Usage
-```
+```Bash
+# Subscribe a live stream of data from a queue to a file.
+bunnybus -S -c /path/to/config.json > output.json
+
+# Publish Json formatted string from a file  and push to Rabbit MQ
+cat input.json | bunnyBus -P -c /path/to/config.json
+
+# Subscribe a live stream of data and pipe it back to RabbitMQ live stream it to a file
+bunnybus -S -c /path/to/config.json | bunnyBus -P -c /path/to/config.json > output.json
 ```
 
 ## Documentation
