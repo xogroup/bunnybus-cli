@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-    assertStream : require('./assertStream'),
+    assertTransform : require('./assertTransform'),
     assertObjectCounter : require('./assertObjectCounter'),
     assertCliConfig : require('./assertCliConfig'),
     assertCliPublisher : require('./assertCliPublish'),

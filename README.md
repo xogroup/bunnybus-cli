@@ -9,7 +9,7 @@ Command line tool for [BunnyBus](https://github.com/xogroup/bunnybus).
 Lead Maintainer: [Lam Chan](https://github.com/lamchakchan)
 
 ## Introduction
-This is a command line tool for supporting the BunnyBus ecosystem.  Support comes in the form of providing a piping utility to bus data via Linux/Unix pipes.  The implementation of this tool embodies the ideology around building small specialized components to compose better whole.
+This is a command line tool for supporting the BunnyBus ecosystem.  Support comes in the form of providing a piping utility to bus data via Linux/Unix pipes.  The implementation of this tool embodies the ideology around building small specialized components to compose a better whole.
 
 ## Installation
 ```
