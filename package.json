@@ -1,6 +1,6 @@
 {
   "name": "bunnybus-cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Command line tool for BunnyBus",
   "keywords": [
     "bunnybus",
