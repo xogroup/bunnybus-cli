@@ -10,6 +10,7 @@
     - [Optional Flags](#optional-flags)
     - [Configuration File](#configuration-file)
   - [`bb-json-streamer`](#bb-json-streamer)
+- [Error Types](#error-types)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

@@ -8,7 +8,7 @@ const Streams = require('../../lib/streams');
 const ObjectReader = Streams.ObjectReader;
 const ObjectCountRecorder = Streams.ObjectCountRecorder;
 
-const assertObjectCounter = (iterations, callback) => {
+const assertObjectCountRecorder = (iterations, callback) => {
 
     const objectReader = new ObjectReader({ prop1 : 'value1' }, { repeat : iterations });
     const objectCountRecorder = new ObjectCountRecorder();
@@ -22,4 +22,4 @@ const assertObjectCounter = (iterations, callback) => {
     });
 };
 
-module.exports = assertObjectCounter;
+module.exports = assertObjectCountRecorder;

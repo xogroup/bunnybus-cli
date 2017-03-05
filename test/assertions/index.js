@@ -2,12 +2,13 @@
 
 module.exports = {
     assertTransform : require('./assertTransform'),
-    assertObjectCounter : require('./assertObjectCounter'),
+    assertObjectCountRecorder : require('./assertObjectCountRecorder'),
     assertCliConfig : require('./assertCliConfig'),
     assertCliPublisher : require('./assertCliPublish'),
     assertCliSubscriber : require('./assertCliSubscriber'),
     assertCliGet : require('./assertCliGet'),
     assertStreamSubscriber : require('./assertStreamSubscriber'),
     assertStreamGet : require('./assertStreamGet'),
-    assertStreamObjectReader : require('./assertStreamObjectReader')
+    assertStreamObjectReader : require('./assertStreamObjectReader'),
+    assertStreamLogger : require('./assertStreamLogger')
 };

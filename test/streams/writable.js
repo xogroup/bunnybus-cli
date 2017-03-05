@@ -7,6 +7,7 @@ const Async = require('async');
 const BunnyBus = require('bunnybus');
 const Streams = require('../../lib/streams');
 const ObjectReader = Streams.ObjectReader;
+const StringWriter = Streams.StringWriter;
 const BunnyBusPublisher = Streams.BunnyBusPublisher;
 
 const lab = exports.lab = Lab.script();
@@ -19,16 +20,33 @@ const expect = Code.expect;
 
 describe('Writable Streams', () => {
 
-    describe('ObjectCountWriter', () => {
+    describe('ObjectCountRecorder', () => {
 
         it('should return a count of 1', (done) => {
 
-            Assertions.assertObjectCounter(1, done);
+            Assertions.assertObjectCountRecorder(1, done);
         });
 
         it('should return a count of 99', (done) => {
 
-            Assertions.assertObjectCounter(99, done);
+            Assertions.assertObjectCountRecorder(99, done);
+        });
+    });
+
+    describe('StringWriter', () => {
+
+        it('should return the input', (done) => {
+
+            const input = 'hello world text';
+            const stringWriter = new StringWriter();
+
+            stringWriter.once('data', (chunk) => {
+
+                expect(chunk).to.equal(input);
+                done();
+            });
+
+            stringWriter.write(input, 'utf8');
         });
     });
 
