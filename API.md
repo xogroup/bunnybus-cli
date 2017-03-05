@@ -4,18 +4,22 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [BunnyBus CLI](#bunnybus-cli)
-  - [Required Flags](#required-flags)
-  - [Optional Flags](#optional-flags)
-  - [Configuration File](#configuration-file)
+- [Commands](#commands)
+  - [`bunnybus`](#bunnybus)
+    - [Required Flags](#required-flags)
+    - [Optional Flags](#optional-flags)
+    - [Configuration File](#configuration-file)
+  - [`bb-json-streamer`](#bb-json-streamer)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## BunnyBus CLI
+## Commands
+
+### `bunnybus`
 
 This CLI tool is built for command line interfacing with the [`BunnyBus`](https://github.com/xogroup/bunnybus) module.  The purpose is to allow users to manipulate data on the bus without needing to write an application wrapper.  This tool embodies the ideology around other Linux/Unix command tools for providing a light weight component that is resuable within a terminal pipe (`|`) chain.
 
-### Required Flags
+#### Required Flags
 
 All required flags are upper cased.
 
@@ -23,7 +27,7 @@ All required flags are upper cased.
 - `-S, --subscribe` - subcribe messages from a queue.  Process will not close unless duration is provided.
 - `-G, --get` - get all existing messages from a queue.  Process will close once end of message is reached.
 
-### Optional Flags
+#### Optional Flags
 
 All optional flags are lower cased.
 
@@ -32,7 +36,7 @@ All optional flags are lower cased.
 - `-t, -tee` - for commands like `--publish` that writes to a device.  This will allow the stdio stream to continue for the next pipe to connect on.
 - `-d, -duration <n>` - used with `--subscribe` to close the subscription after provded time in milliseconds.  *[integer]*
 
-### Configuration File
+#### Configuration File
 
 The configuration file is in JSON format.
 
@@ -71,5 +75,8 @@ The configuration file is in JSON format.
 }
 ```
 
+### `bb-json-streamer`
+
+A single purpose string transform CLI tool.  Given a stream of type `utf8` characters for input, this utility will parse out identifying segments of JSON structure and output on the other end.  Any characters within the string not residing within the JSON defined structure will be disgarded.  This transform is destructive and does not provide a 1 to 1 input / output flow pipeline.  The output of all JSON will be newline `\n` delimited.
 
 

@@ -36,10 +36,7 @@ See the [API Reference](http://github.com/xogroup/bunnybus-cli/blob/master/API.m
 
 ### Examples
 
-
-
-### Diagrams
-
+Check out the [Examples](http://github.com/xogroup/bunnybus-cli/blob/master/Example.md)
 
 
 ## Contributing
