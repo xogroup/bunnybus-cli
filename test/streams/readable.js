@@ -83,24 +83,24 @@ describe('Readable Streams', () => {
                 ], done);
             });
 
-            it('should subscribe a 1 message from a queue', (done) => {
+            it('should subscribe 1 message from a queue', (done) => {
 
                 Assertions.assertStreamSubscriber(bunnyBus, 1, queueName, done, 100);
             });
 
-            it('should subscribe a 100 message from a queue', (done) => {
+            it('should subscribe 100 message from a queue', (done) => {
 
                 Assertions.assertStreamSubscriber(bunnyBus, 100, queueName, done, 400);
             });
 
-            it('should subscribe a 500 message from a queue', (done) => {
+            it('should subscribe 500 message from a queue', (done) => {
 
                 Assertions.assertStreamSubscriber(bunnyBus, 500, queueName, done, 800);
             });
         });
     });
 
-    describe('BunnyBusSubscriber', () => {
+    describe('BunnyBusGet', () => {
 
         const queueName = 'bunnybus-cli-bunnybus-get-stream';
 
@@ -124,17 +124,17 @@ describe('Readable Streams', () => {
                 ], done);
             });
 
-            it('should subscribe a 1 message from a queue', (done) => {
+            it('should subscribe 1 message from a queue', (done) => {
 
                 Assertions.assertStreamGet(bunnyBus, 1, queueName, done);
             });
 
-            it('should subscribe a 100 message from a queue', (done) => {
+            it('should subscribe 100 message from a queue', (done) => {
 
                 Assertions.assertStreamGet(bunnyBus, 100, queueName, done);
             });
 
-            it('should subscribe a 500 message from a queue', (done) => {
+            it('should subscribe 500 message from a queue', (done) => {
 
                 Assertions.assertStreamGet(bunnyBus, 500, queueName, done);
             });

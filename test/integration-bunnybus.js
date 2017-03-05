@@ -142,7 +142,7 @@ describe('bunnybus', () => {
             ], done);
         });
 
-        it('should publish a 1 object', (done) => {
+        it('should publish 1 object', (done) => {
 
             Assertions.assertCliPublisher(bunnyBus, queueName, 1, true, done);
         });

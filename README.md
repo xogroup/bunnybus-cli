@@ -32,6 +32,7 @@ bunnybus -S -c /path/to/config.json | bunnyBus -P -c /path/to/config.json > outp
 
 ### API
 
+See the [API Reference](http://github.com/xogroup/bunnybus-cli/blob/master/API.md).
 
 ### Examples
 
