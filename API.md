@@ -79,4 +79,12 @@ The configuration file is in JSON format.
 
 A single purpose string transform CLI tool.  Given a stream of type `utf8` characters for input, this utility will parse out identifying segments of JSON structure and output on the other end.  Any characters within the string not residing within the JSON defined structure will be disgarded.  This transform is destructive and does not provide a 1 to 1 input / output flow pipeline.  The output of all JSON will be newline `\n` delimited.
 
+## Error Types
 
+All BunnyBus CLI errors are extended from the native `Error` class.
+
+- `JsonStringFormatError` - thrown when the JSON string transformer class can not reconcile input and stops in a bad state.
+- `OperationError` - any operation error derived from executing `BunnyBus` API calls.
+- `QueueConfigMissingError` - used when the loaded configuration is missing value for `queue`.
+- `QueueNameMissingError` - used when the loaded configuration is missing value for `queue.name`.
+- `RouteKeyMissingError` - used when the loaded configuration is missing value for `queue.routeKey`.
