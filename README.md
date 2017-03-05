@@ -50,10 +50,13 @@ We love community and contributions! Please check out our [guidelines](http://gi
 3. Run the commands below
 
 ```
+[sudo] npm link
 npm install
 npm run start-docker
 npm test
 npm run stop-docker
 ```
+
+`npm link` is necessary for the test to function since the test suite executes end to end against the CLI commands.
 
 For normal development/test iterations, there is no need to stop the docker container.  When the docker container is already running, just run `npm test`.
