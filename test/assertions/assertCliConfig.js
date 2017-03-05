@@ -14,8 +14,6 @@ const assertCliConfig = (prependText, appendConfig, callback) => {
         ? `bunnybus -c ${prependText ? prependText : ''}${configurationPath}`
         : 'bunnybus -c';
 
-    console.log(command);
-
     Exec(command, (err, stdout, stderr) => {
 
         if (appendConfig) {

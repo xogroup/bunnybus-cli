@@ -9,11 +9,19 @@ const BareMessage = require('../mocks/bareMessage.json');
 const configurationPath = 'test/mocks/configuration.json';
 const bareMessagePath = 'test/mocks/bareMessage.json';
 
-const assertCliPublish = (bunnyBus, queueName, iterations, callback) => {
+const assertCliPublish = (bunnyBus, queueName, iterations, isTee, callback) => {
 
     const handlers = {};
     let fileList = '';
     let counter = 0;
+    let finishCounter = 0;
+
+    const finish = () => {
+
+        if (++finishCounter === 2) {
+            callback();
+        }
+    };
 
     handlers[BareMessage.event] = (message, ack) => {
 
@@ -21,7 +29,7 @@ const assertCliPublish = (bunnyBus, queueName, iterations, callback) => {
         ack();
 
         if (++counter === iterations) {
-            callback();
+            finish();
         }
     };
 
@@ -31,7 +39,15 @@ const assertCliPublish = (bunnyBus, queueName, iterations, callback) => {
 
     bunnyBus.subscribe(queueName, handlers, () => {
 
-        Exec(`cat ${fileList} | bunnybus -P -c ${configurationPath}`);
+        Exec(`cat ${fileList} | bunnybus -P ${isTee ? '-t' : ''} -c ${configurationPath}`, (err, stdout) => {
+
+            if (isTee) {
+                expect(err).to.be.null();
+                expect(stdout.length).to.be.above(0);
+            }
+
+            finish();
+        });
     });
 };
 

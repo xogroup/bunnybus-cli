@@ -49,7 +49,7 @@ describe('bunnybus', () => {
         });
     });
 
-    describe('-P -c -d', () => {
+    describe('-P -c', () => {
 
         const queueName = 'bunnybus-cli-bunnybus-publisher';
 
@@ -82,36 +82,73 @@ describe('bunnybus', () => {
 
         it('should publish a 1 object', (done) => {
 
-            Assertions.assertCliPublisher(bunnyBus, queueName, 1, done);
+            Assertions.assertCliPublisher(bunnyBus, queueName, 1, false, done);
         });
 
         it('should publish a 35 objects', (done) => {
 
-            Assertions.assertCliPublisher(bunnyBus, queueName, 51, done);
+            Assertions.assertCliPublisher(bunnyBus, queueName, 51, false, done);
         });
 
         it('should publish a 51 objects', (done) => {
 
-            Assertions.assertCliPublisher(bunnyBus, queueName, 51, done);
+            Assertions.assertCliPublisher(bunnyBus, queueName, 51, false, done);
         });
 
         it('should publish a 60 objects', (done) => {
 
-            Assertions.assertCliPublisher(bunnyBus, queueName, 60, done);
+            Assertions.assertCliPublisher(bunnyBus, queueName, 60, false, done);
         });
 
         it('should publish a 75 objects', (done) => {
 
-            Assertions.assertCliPublisher(bunnyBus, queueName, 75, done);
+            Assertions.assertCliPublisher(bunnyBus, queueName, 75, false, done);
         });
 
         it('should publish a 100 objects', (done) => {
 
-            Assertions.assertCliPublisher(bunnyBus, queueName, 100, done);
+            Assertions.assertCliPublisher(bunnyBus, queueName, 100, false, done);
         });
     });
 
-    describe('-S -c', () => {
+    describe('-P -c -t', () => {
+
+        const queueName = 'bunnybus-cli-bunnybus-publisher';
+
+        before((done) => {
+
+            Async.waterfall([
+                bunnyBus._autoConnectChannel,
+                (cb) => bunnyBus.createExchange(bunnyBus.config.globalExchange, 'topic', cb),
+                (result, cb) => bunnyBus.createQueue(queueName, cb),
+                (result, cb) => bunnyBus.channel.bindQueue(queueName, bunnyBus.config.globalExchange, BareMessage.event, null, cb)
+            ], done);
+        });
+
+        beforeEach((done) => {
+
+            Async.waterfall([
+                bunnyBus._autoConnectChannel,
+                bunnyBus.unsubscribe.bind(bunnyBus, queueName)
+            ], done);
+        });
+
+        after((done) => {
+
+            Async.waterfall([
+                bunnyBus._autoConnectChannel,
+                bunnyBus.deleteExchange.bind(bunnyBus, queueName),
+                bunnyBus.deleteQueue.bind(bunnyBus, queueName)
+            ], done);
+        });
+
+        it('should publish a 1 object', (done) => {
+
+            Assertions.assertCliPublisher(bunnyBus, queueName, 1, true, done);
+        });
+    });
+
+    describe('-S -c -d', () => {
 
         const queueName = ConfigurationFile.queue.name;
 
@@ -146,6 +183,44 @@ describe('bunnybus', () => {
         it('should subscribe 500 object', (done) => {
 
             Assertions.assertCliSubscriber(bunnyBus, queueName, 500, done, 800);
+        });
+    });
+
+    describe('-G -c', () => {
+
+        const queueName = ConfigurationFile.queue.name;
+
+        beforeEach((done) => {
+
+            Async.waterfall([
+                bunnyBus._autoConnectChannel,
+                (cb) => bunnyBus.createExchange(bunnyBus.config.globalExchange, 'topic', cb),
+                (result, cb) => bunnyBus.createQueue(queueName, cb)
+            ], done);
+        });
+
+        afterEach((done) => {
+
+            Async.waterfall([
+                bunnyBus._autoConnectChannel,
+                bunnyBus.deleteExchange.bind(bunnyBus, queueName),
+                bunnyBus.deleteQueue.bind(bunnyBus, queueName)
+            ], done);
+        });
+
+        it('should subscribe 1 object', (done) => {
+
+            Assertions.assertCliGet(bunnyBus, queueName, 1, done);
+        });
+
+        it('should subscribe 100 object', (done) => {
+
+            Assertions.assertCliGet(bunnyBus, queueName, 100, done);
+        });
+
+        it('should subscribe 500 object', (done) => {
+
+            Assertions.assertCliGet(bunnyBus, queueName, 500, done);
         });
     });
 });
