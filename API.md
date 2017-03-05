@@ -28,7 +28,7 @@ All required flags are upper cased.
 All optional flags are lower cased.
 
 - `-h, --help` - print help page.
-- `-c, --config <path>' - file path input for configuration path.  Must be used in conjunction with the following flags (`-P`, `-S`, `-G`).  Refer to this file [specification](#configuration-file). *[string]*
+- `-c, --config <path>` - file path input for configuration path.  Must be used in conjunction with the following flags (`-P`, `-S`, `-G`).  Refer to this file [specification](#configuration-file). *[string]*
 - `-t, -tee` - for commands like `--publish` that writes to a device.  This will allow the stdio stream to continue for the next pipe to connect on.
 - `-d, -duration <n>` - used with `--subscribe` to close the subscription after provded time in milliseconds.  *[integer]*
 
