@@ -1,5 +1,7 @@
 # Examples
 
+All examples shown leverages the core `BunnyBus` [API](http://github.com/xogroup/bunnybus/blob/master/API.md).  Check the documentation there for inquiries for how payloads and configuration should be provided.
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
