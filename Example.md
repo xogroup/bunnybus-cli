@@ -11,6 +11,7 @@
   - [Subscribing data from a queue with a set expiration to close](#subscribing-data-from-a-queue-with-a-set-expiration-to-close)
   - [Fetch all data from a queue and redirect to a file.](#fetch-all-data-from-a-queue-and-redirect-to-a-file)
   - [Pipe all data from one RabbitMQ server to another.](#pipe-all-data-from-one-rabbitmq-server-to-another)
+  - [Pipe data from Postgres to RabbitMQ](#pipe-data-from-postgres-to-rabbitmq)
 - [`bb-json-streamer`](#bb-json-streamer)
   - [Filter all contents from a file for JSON strings.](#filter-all-contents-from-a-file-for-json-strings)
 
@@ -81,6 +82,14 @@ Fetches all data from a queue on server one.  This data will be published to ser
 
 ```
 bunnybus -G -c /path/to/server1.json | bunnybus --P -c /path/to/server2.json > logs.json
+```
+
+### Pipe data from Postgres to RabbitMQ
+
+Given a Postgres database with name of `dbName`, select the `data` column of type jsonb from the `users` table.  The output from the selections will be piped to `bunnybus` to be piped into RabbitMQ.
+
+```
+psql -d dbName -c "(select data from users) to stdout | bunnybus -P -c /path/to/config.json > users.json
 ```
 
 ## `bb-json-streamer`
