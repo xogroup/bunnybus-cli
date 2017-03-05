@@ -18,6 +18,14 @@ const expect = Code.expect;
 
 describe('Readable Streams', () => {
 
+    let bunnyBus = undefined;
+
+    before((done) => {
+
+        bunnyBus = new BunnyBus();
+        done();
+    });
+
     describe('StringReader', () => {
 
         it('should return an entire buffer', (done) => {
@@ -54,13 +62,6 @@ describe('Readable Streams', () => {
     describe('BunnyBusSubscriber', () => {
 
         const queueName = 'bunnybus-cli-bunnybus-subscriber-stream';
-        let bunnyBus = undefined;
-
-        before((done) => {
-
-            bunnyBus = new BunnyBus();
-            done();
-        });
 
         describe('positive test', () => {
 
@@ -95,6 +96,47 @@ describe('Readable Streams', () => {
             it('should subscribe a 500 message from a queue', (done) => {
 
                 Assertions.assertStreamSubscriber(bunnyBus, 500, queueName, done, 800);
+            });
+        });
+    });
+
+    describe('BunnyBusSubscriber', () => {
+
+        const queueName = 'bunnybus-cli-bunnybus-get-stream';
+
+        describe('positive test', () => {
+
+            beforeEach((done) => {
+
+                Async.waterfall([
+                    bunnyBus._autoConnectChannel,
+                    (cb) => bunnyBus.createExchange(bunnyBus.config.globalExchange, 'topic', cb),
+                    (result, cb) => bunnyBus.createQueue(queueName, cb)
+                ], done);
+            });
+
+            afterEach((done) => {
+
+                Async.waterfall([
+                    bunnyBus._autoConnectChannel,
+                    bunnyBus.deleteExchange.bind(bunnyBus, queueName),
+                    bunnyBus.deleteQueue.bind(bunnyBus, queueName)
+                ], done);
+            });
+
+            it('should subscribe a 1 message from a queue', (done) => {
+
+                Assertions.assertStreamGet(bunnyBus, 1, queueName, done);
+            });
+
+            it('should subscribe a 100 message from a queue', (done) => {
+
+                Assertions.assertStreamGet(bunnyBus, 100, queueName, done);
+            });
+
+            it('should subscribe a 500 message from a queue', (done) => {
+
+                Assertions.assertStreamGet(bunnyBus, 500, queueName, done);
             });
         });
     });
