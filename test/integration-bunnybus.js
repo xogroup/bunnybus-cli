@@ -218,7 +218,7 @@ describe('bunnybus', () => {
             Assertions.assertCliGet(bunnyBus, queueName, 100, done);
         });
 
-        it('should subscribe 500 object', (done) => {
+        it('should subscribe 500 object', { timeout : 4000 }, (done) => {
 
             Assertions.assertCliGet(bunnyBus, queueName, 500, done);
         });

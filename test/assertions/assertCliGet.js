@@ -13,7 +13,7 @@ const assertCliGet = (bunnyBus, queueName, iterations, callback) => {
 
     Async.timesLimit(
         iterations,
-        50,
+        20,
         (n, cb) => bunnyBus.send(BareMessage, queueName, cb),
         () => {
 

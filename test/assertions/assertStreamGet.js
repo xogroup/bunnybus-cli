@@ -20,7 +20,7 @@ const assertStreamGet = (bunnyBus, iterations, queueName, callback) => {
 
     Async.timesLimit(
         iterations,
-        50,
+        20,
         (n, cb) => bunnyBus.send(BareMessage, queueName, cb),
         () => {
 
