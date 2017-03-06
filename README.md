@@ -16,7 +16,7 @@ This is a command line tool for supporting the BunnyBus ecosystem.  Support come
 npm i -g bunnybus-cli
 ```
 
-##Usage
+## Usage
 ```Bash
 # Subscribe a live stream of data from a queue to a file.
 bunnybus -S -c /path/to/config.json > output.json
@@ -25,7 +25,7 @@ bunnybus -S -c /path/to/config.json > output.json
 cat input.json | bunnyBus -P -c /path/to/config.json
 
 # Subscribe a live stream of data and pipe it back to RabbitMQ live stream it to a file
-bunnybus -S -c /path/to/config.json | bunnyBus -P -c /path/to/config.json > output.json
+bunnybus -S -c /path/to/config.json | bunnyBus -P -t -c /path/to/config.json > output.json
 ```
 
 ## Documentation
