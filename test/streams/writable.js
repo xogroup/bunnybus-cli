@@ -91,18 +91,28 @@ describe('Writable Streams', () => {
                 ], done);
             });
 
-            it('should write publish a message to a subscribing queue', (done) => {
+            it('should publish a message with no metadata to a subscribing queue', (done) => {
 
                 const objectReader = new ObjectReader(BareMessage);
                 const bunnyBusPublisher = new BunnyBusPublisher();
+                const finishCounter = 0;
+
+                const finish = () =>  {
+
+                    if (++finishCounter === 2) {
+                        done();
+                    }
+                };
+
                 const handlers = {};
                 handlers[BareMessage.event] = (message, ack) => {
 
                     expect(message).to.be.equal(BareMessage);
                     ack();
+                    finish();
                 };
 
-                bunnyBusPublisher.once('close', done);
+                bunnyBusPublisher.once('close', finish);
 
                 bunnyBus.subscribe(queueName, handlers, () => {
 
