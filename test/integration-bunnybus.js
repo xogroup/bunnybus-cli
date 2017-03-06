@@ -1,6 +1,9 @@
 'use strict';
 
 const Lab = require('lab');
+const Code = require('code');
+const Fs = require('fs');
+const Exec = require('child_process').exec;
 const Assertions = require('./assertions');
 const Async = require('async');
 const BunnyBus = require('bunnybus');
@@ -12,6 +15,7 @@ const after = lab.after;
 const afterEach = lab.afterEach;
 const describe = lab.describe;
 const it = lab.it;
+const expect = Code.expect;
 
 let bunnyBus = undefined;
 
@@ -46,6 +50,31 @@ describe('bunnybus', () => {
         it('should stderr when no path is provided with config flag', (done) => {
 
             Assertions.assertCliConfig(null, false, done);
+        });
+    });
+
+    describe('-c -v', () => {
+
+        const logFilePath = '/tmp/bunnybus-cli-logs.json';
+        const configurationPath = 'test/mocks/configuration.json';
+
+        beforeEach((done) => {
+
+            if (Fs.existsSync(logFilePath)) {
+                Fs.unlink(logFilePath, done);
+            }
+            else {
+                done();
+            }
+        });
+
+        it('should write configs to a log file', (done) => {
+
+            Exec(`bunnybus -c ${configurationPath} -v ${logFilePath}`, () => {
+
+                expect(Fs.existsSync(logFilePath)).to.be.true();
+                done();
+            });
         });
     });
 
