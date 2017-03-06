@@ -95,26 +95,50 @@ describe('Writable Streams', () => {
 
                 const objectReader = new ObjectReader(BareMessage);
                 const bunnyBusPublisher = new BunnyBusPublisher();
-                const finishCounter = 0;
-
-                const finish = () =>  {
-
-                    if (++finishCounter === 2) {
-                        done();
-                    }
-                };
 
                 const handlers = {};
                 handlers[BareMessage.event] = (message, ack) => {
 
                     expect(message).to.be.equal(BareMessage);
                     ack();
-                    finish();
                 };
 
-                bunnyBusPublisher.once('close', finish);
+                bunnyBusPublisher.once('close', done);
 
                 bunnyBus.subscribe(queueName, handlers, () => {
+
+                    objectReader.pipe(bunnyBusPublisher);
+                });
+            });
+
+            it('should publish a message with metadata to a subscribing queue', (done) => {
+
+                const payload = {
+                    message : BareMessage,
+                    metaData : {
+                        headers : {
+                            transactionId : 'abc123xyz',
+                            source : 'bunnybus-cli-publish-test'
+                        }
+                    }
+                };
+
+                const objectReader = new ObjectReader(payload);
+                const bunnyBusPublisher = new BunnyBusPublisher({ metaData : true });
+
+                const handlers = {};
+                handlers[BareMessage.event] = (message, metaData, ack) => {
+
+                    expect(message).to.be.equal(BareMessage);
+                    expect(metaData).to.exist();
+                    expect(metaData.headers.transactionId).to.be.equal(payload.metaData.headers.transactionId);
+                    expect(metaData.headers.source).to.be.equal(payload.metaData.headers.source);
+                    ack();
+                };
+
+                bunnyBusPublisher.once('close', done);
+
+                bunnyBus.subscribe(queueName, handlers, { meta : true }, () => {
 
                     objectReader.pipe(bunnyBusPublisher);
                 });
