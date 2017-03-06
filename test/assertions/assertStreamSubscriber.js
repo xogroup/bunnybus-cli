@@ -11,12 +11,12 @@ const expect = Code.expect;
 const ConfigurationFile = require('../mocks/configuration.json');
 const BareMessage = require('../mocks/bareMessage.json');
 
-const assertStreamSubscriber = (bunnyBus, iterations, queueName, callback, durationMs = 1700) => {
+const assertStreamSubscriber = (bunnyBus, iterations, queueName, metaData, callback, durationMs = 1700) => {
 
     const config = Object.assign({}, ConfigurationFile);
     config.queue.name = queueName;
-    const bunnyBusSubscriber = new BunnyBusSubscriber({ bunnyBus : config , durationMs });
-    const objectCounterRecorder = new ObjectCountRecorder();
+    const bunnyBusSubscriber = new BunnyBusSubscriber({ bunnyBus : config , durationMs, metaData });
+    const objectCountRecorder = new ObjectCountRecorder();
 
     Async.timesLimit(
         iterations,
@@ -24,11 +24,22 @@ const assertStreamSubscriber = (bunnyBus, iterations, queueName, callback, durat
         (n, cb) => bunnyBus.send(BareMessage, queueName, cb),
         () => {
 
-            bunnyBusSubscriber.pipe(objectCounterRecorder);
+            bunnyBusSubscriber.pipe(objectCountRecorder);
 
             bunnyBusSubscriber.once('close', () => {
 
-                expect(objectCounterRecorder.count).to.equal(iterations);
+                expect(objectCountRecorder.count).to.equal(iterations);
+                const result = JSON.parse(objectCountRecorder.currentObject);
+
+                if (metaData) {
+                    expect(result.message).to.be.equal(BareMessage);
+                    expect(result.metaData).to.exist();
+                    expect(result.process).to.exist();
+                }
+                else {
+                    expect(result).to.be.equal(BareMessage);
+                }
+
                 callback();
             });
         });

@@ -10,7 +10,8 @@ const ObjectCountRecorder = Streams.ObjectCountRecorder;
 
 const assertObjectCountRecorder = (iterations, callback) => {
 
-    const objectReader = new ObjectReader({ prop1 : 'value1' }, { repeat : iterations });
+    const input = { prop1 : 'value1' };
+    const objectReader = new ObjectReader(input, { repeat : iterations });
     const objectCountRecorder = new ObjectCountRecorder();
 
     const pipe = objectReader.pipe(objectCountRecorder);
@@ -18,6 +19,7 @@ const assertObjectCountRecorder = (iterations, callback) => {
     pipe.once('finish', () => {
 
         expect(objectCountRecorder.count).to.be.equal(iterations);
+        expect(objectCountRecorder.currentObject).to.be.equal(input);
         callback();
     });
 };

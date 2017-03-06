@@ -22,6 +22,7 @@ describe('Readable Streams', () => {
 
     before((done) => {
 
+        process.setMaxListeners(50);
         bunnyBus = new BunnyBus();
         done();
     });
@@ -83,19 +84,34 @@ describe('Readable Streams', () => {
                 ], done);
             });
 
-            it('should subscribe 1 message from a queue', (done) => {
+            it('should subscribe 1 message with no metadata from a queue', (done) => {
 
-                Assertions.assertStreamSubscriber(bunnyBus, 1, queueName, done, 100);
+                Assertions.assertStreamSubscriber(bunnyBus, 1, queueName, false, done, 100);
             });
 
-            it('should subscribe 100 message from a queue', (done) => {
+            it('should subscribe 100 message with no metadata from a queue', (done) => {
 
-                Assertions.assertStreamSubscriber(bunnyBus, 100, queueName, done, 400);
+                Assertions.assertStreamSubscriber(bunnyBus, 100, queueName, false, done, 400);
             });
 
-            it('should subscribe 500 message from a queue', (done) => {
+            it('should subscribe 500 message with no metadata from a queue', (done) => {
 
-                Assertions.assertStreamSubscriber(bunnyBus, 500, queueName, done, 800);
+                Assertions.assertStreamSubscriber(bunnyBus, 500, queueName, false, done, 800);
+            });
+
+            it('should subscribe 1 message with metadata from a queue', (done) => {
+
+                Assertions.assertStreamSubscriber(bunnyBus, 1, queueName, true, done, 100);
+            });
+
+            it('should subscribe 100 message with metadata from a queue', (done) => {
+
+                Assertions.assertStreamSubscriber(bunnyBus, 100, queueName, true, done, 400);
+            });
+
+            it('should subscribe 500 message with metadata from a queue', (done) => {
+
+                Assertions.assertStreamSubscriber(bunnyBus, 500, queueName, true, done, 800);
             });
         });
     });
@@ -124,19 +140,34 @@ describe('Readable Streams', () => {
                 ], done);
             });
 
-            it('should subscribe 1 message from a queue', (done) => {
+            it('should subscribe 1 message with no metadata from a queue', (done) => {
 
-                Assertions.assertStreamGet(bunnyBus, 1, queueName, done);
+                Assertions.assertStreamGet(bunnyBus, 1, queueName, false, done);
             });
 
-            it('should subscribe 100 message from a queue', (done) => {
+            it('should subscribe 100 message with no metadata from a queue', (done) => {
 
-                Assertions.assertStreamGet(bunnyBus, 100, queueName, done);
+                Assertions.assertStreamGet(bunnyBus, 100, queueName, false, done);
             });
 
-            it('should subscribe 500 message from a queue', (done) => {
+            it('should subscribe 500 message with no metadata from a queue', (done) => {
 
-                Assertions.assertStreamGet(bunnyBus, 500, queueName, done);
+                Assertions.assertStreamGet(bunnyBus, 500, queueName, false, done);
+            });
+
+            it('should subscribe 1 message with metadata from a queue', (done) => {
+
+                Assertions.assertStreamGet(bunnyBus, 1, queueName, true, done);
+            });
+
+            it('should subscribe 100 message with metadata from a queue', (done) => {
+
+                Assertions.assertStreamGet(bunnyBus, 100, queueName, true, done);
+            });
+
+            it('should subscribe 500 message with metadata from a queue', (done) => {
+
+                Assertions.assertStreamGet(bunnyBus, 500, queueName, true, done);
             });
         });
     });
