@@ -14,6 +14,7 @@ All examples shown leverages the core `BunnyBus` [API](http://github.com/xogroup
   - [Fetch all data from a queue and redirect to a file.](#fetch-all-data-from-a-queue-and-redirect-to-a-file)
   - [Pipe all data from one RabbitMQ server to another.](#pipe-all-data-from-one-rabbitmq-server-to-another)
   - [Pipe data from Postgres to RabbitMQ](#pipe-data-from-postgres-to-rabbitmq)
+  - [Using meta data with subscribe and get flags](#using-meta-data-with-subscribe-and-get-flags)
 - [`bb-json-streamer`](#bb-json-streamer)
   - [Filter all contents from a file for JSON strings.](#filter-all-contents-from-a-file-for-json-strings)
 
@@ -36,14 +37,16 @@ Will bring up
 
   Options:
 
-    -h, --help           output usage information
-    -V, --version        output the version number
-    -P, --publish        publish a message to an exchange
-    -S, --subscribe      subscribe message(s) from a queue
-    -G, --get            get all message(s) from queue until empty
-    -c, --config <path>  path to the configuration file
-    -t, --tee            tee to stdout
-    -d, --duration <n>   set a runtime duration for subscribe to close within <n> milliseconds. defaults to 0 for infinite
+    -h, --help            output usage information
+    -V, --version         output the version number
+    -P, --publish         publish a message to an exchange
+    -S, --subscribe       subscribe message(s) from a queue
+    -G, --get             get all message(s) from queue until empty
+    -c, --config <path>   path to the configuration file
+    -t, --tee             tee to stdout
+    -d, --duration <n>    set a runtime duration for subscribe to close within <n> milliseconds. defaults to 0 for infinite
+    -m, --metadata        generate or consume BunnyBus metadata
+    -v, --verbose <path>  output path to a file for logging
 ```
 
 ### Piping data from a file and publishing to a queue
@@ -62,6 +65,21 @@ Subscribe data from `bunnybus` and all of it will be redirected to `users.json`.
 bunnybus -S -c /path/to/config.json > users.json
 ```
 
+will produce
+
+```
+{
+    "id": "123",
+    "firstName": "John",
+    "lastName": "Smith"
+}
+{
+    "id": "456",
+    "firstName": "Jacklyn",
+    "lastName": "McKenzie"
+}
+```
+
 ### Subscribing data from a queue with a set expiration to close
 
 This mimics the behavior from the above [example](#subscribing-data-from-a-queue-and-redirecting-output-to-a-file).  The major difference is that this process will close after 5 seconds of operation regardless if there are any more data on the subscribed queue.
@@ -78,6 +96,21 @@ Fetches all data currently on the queue until empty and then the process will cl
 bunnybus -G -c /path/to/config.json > users.json
 ```
 
+will produce
+
+```
+{
+    "id": "123",
+    "firstName": "John",
+    "lastName": "Smith"
+}
+{
+    "id": "456",
+    "firstName": "Jacklyn",
+    "lastName": "McKenzie"
+}
+```
+
 ### Pipe all data from one RabbitMQ server to another.
 
 Fetches all data from a queue on server one.  This data will be published to server two.  All data that was streamed will be piped to a file for auditing.
@@ -92,6 +125,52 @@ Given a Postgres database with name of `dbName`, select the `data` column of typ
 
 ```
 psql -d dbName -c "(select data from users) to stdout | bunnybus -P -c /path/to/config.json > users.json
+```
+
+### Using meta data with subscribe and get flags
+
+When the meta data flag is present, the message will be wrapped in an envelope to carry extra meta data information associated with the payload sent over the wire.
+
+```
+bunnybus -S -m -c /path/to/config.json > users.json
+bunnybus -G -m -c /path/to/config.json > users.json
+```
+
+will produce
+
+```
+{
+    "message": {
+        "id": "123",
+        "firstName": "John",
+        "lastName": "Smith"
+    },
+    "metaData": {
+        "transactionId": "123abc456",
+        "source": "systemA",
+        "createAt": "2017-03-06T05:14:56.451Z"
+    },
+    "process": {
+        "name": "bunnybus-cli",
+        "version": "2.0.0"
+    }
+}
+{
+    "message": {
+        "id": "456",
+        "firstName": "Jacklyn",
+        "lastName": "McKenzie"
+    },
+    "metaData": {
+        "transactionId": "789abc321",
+        "source": "systemB",
+        "createAt": "2017-03-06T05:14:56.451Z"
+    },
+    "process": {
+        "name": "bunnybus-cli",
+        "version": "2.0.0"
+    }
+}
 ```
 
 ## `bb-json-streamer`
