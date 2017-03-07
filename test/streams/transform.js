@@ -55,7 +55,7 @@ describe('Transform Streams', () => {
                 Assertions.assertTransform(done, this, new JsonToObjectTransform());
             });
 
-            it_object('should return an object when given', new Buffer('hello'), function (done) {
+            it_object('should return an object when given', Buffer.from('hello'), function (done) {
 
                 Assertions.assertTransform(done, this, new JsonToObjectTransform());
             });
@@ -156,7 +156,7 @@ describe('Transform Streams', () => {
                 Assertions.assertTransform(done, this, new StringToJsonBufferTransform(), true);
             });
 
-            it_object('should return json string when given', new Buffer('hello'), function (done) {
+            it_object('should return json string when given', Buffer.from('hello'), function (done) {
 
                 Assertions.assertTransform(done, this, new StringToJsonBufferTransform(), true);
             });
